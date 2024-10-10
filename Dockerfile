@@ -8,21 +8,23 @@ RUN apt-get update && apt-get install -y \
     odbcinst \
     libpq-dev \
     curl \
-    nginx \
+    gnupg2 \
+    apt-transport-https \
     build-essential \
+    nginx \
     && apt-get clean
 
-# Installiere den ODBC-Treiber für Microsoft SQL Server
+# Füge das neueste Microsoft SQL Server ODBC-Repository hinzu
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get install -y msodbcsql17
 
-# Konfiguriere und installiere PHP-Erweiterungen
+# Installiere PHP-Erweiterungen
 RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr \
     && docker-php-ext-install pdo_odbc pdo pdo_mysql
 
-# Kopiere und konfiguriere die ODBC INI-Dateien
+# Kopiere die ODBC INI-Dateien
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
 
