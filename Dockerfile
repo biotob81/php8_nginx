@@ -33,7 +33,7 @@ COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
 
 # Installiere NGINX und kopiere Konfigurationsdatei
-# COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Starte PHP-FPM und NGINX
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
