@@ -24,6 +24,10 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr \
     && docker-php-ext-install pdo_odbc pdo pdo_mysql
 
+USER root
+
+WORKDIR /var/www/html
+
 # Kopiere die ODBC INI-Dateien
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
