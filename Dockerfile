@@ -1,5 +1,5 @@
-# Basis-Image für PHP 8.0 mit FPM
-FROM php:8.0-fpm
+# Verwende das Alpine-Image von tangramor/nginx-php8-fpm als Basis
+FROM tangramor/nginx-php8-fpm:alpine
 
 # Installiere Systempakete für ODBC und PHP
 RUN apt-get update && apt-get install -y \
@@ -20,27 +20,16 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get install -y msodbcsql17
 
-# Installiere PHP-Erweiterungen
+# Installiere PHP-Erweiterungen für PDO und ODBC
 RUN docker-php-ext-configure pdo_odbc --with-pdo-odbc=unixODBC,/usr \
     && docker-php-ext-install pdo_odbc pdo pdo_mysql
-
-# USER root
-
-WORKDIR /var/www/html
 
 # Kopiere die ODBC INI-Dateien
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.ini /etc/odbc.ini
+COPY freetds.conf /etc/freetds/freetds.conf
 
-# Installiere NGINX und kopiere Konfigurationsdatei
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Starte PHP-FPM und NGINX
-CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
-
-# Exponiere Port 80 (HTTP), 443 (HTTPS), TCP 139, UDP 138, UDP 137
+# Exponiere notwendige Ports (HTTP, HTTPS, NetBIOS)
 EXPOSE 80
 EXPOSE 443
-EXPOSE 139
-EXPOSE 138
-EXPOSE 137
+EXPOSE 2683
