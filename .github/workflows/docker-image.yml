@@ -1,7 +1,7 @@
 name: publish
 on: [push]
 jobs:
-  nextcloud:
+  php8_nginx:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
