@@ -1,5 +1,5 @@
 # Verwende das Alpine-Image von tangramor/nginx-php8-fpm als Basis
-FROM tangramor/nginx-php8-fpm:alpine
+FROM ghcr.io/tangramor/nginx-php8-fpm:alpine
 
 # Installiere Systempakete für ODBC und PHP
 RUN apt-get update && apt-get install -y \
