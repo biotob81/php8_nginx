@@ -34,5 +34,9 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Starte PHP-FPM und NGINX
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
 
-# Exponiere Port 80
+# Exponiere Port 80 (HTTP), 443 (HTTPS), TCP 139, UDP 138, UDP 137
 EXPOSE 80
+EXPOSE 443
+EXPOSE 139
+EXPOSE 138
+EXPOSE 137
